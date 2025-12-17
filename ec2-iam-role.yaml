@@ -5,7 +5,7 @@ Resources:
   MyS3ReadOnlyRole:
     Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: 'AppServerS3ReadOnlyRole'
+      RoleName: 'S3ReadOnlyRole'
       # The Trust Policy: This allows EC2 instances to assume this role
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
