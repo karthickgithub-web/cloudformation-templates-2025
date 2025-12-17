@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Template to create a basic IAM Role for EC2 with S3 Read-Only access.'
+
+Resources:
+  MyS3ReadOnlyRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: 'AppServerS3ReadOnlyRole'
+      # The Trust Policy: This allows EC2 instances to assume this role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      
+      # Attaching a Managed Policy (Optional)
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+      
+      # Adding an Inline Policy (Optional)
+      Policies:
+        - PolicyName: 'AllowLogCreation'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Resource: '*'
+
+Outputs:
+  RoleId:
+    Description: 'The ID of the created IAM Role'
+    Value: !Ref MyS3ReadOnlyRole
+  RoleArn:
+    Description: 'The ARN of the created IAM Role'
+    Value: !GetAtt MyS3ReadOnlyRole.Arn
